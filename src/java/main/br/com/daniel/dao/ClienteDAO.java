@@ -3,6 +3,8 @@ package br.com.daniel.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.daniel.dao.jdbc.ConnectionFactory;
 import br.com.daniel.domain.Cliente;
@@ -129,6 +131,52 @@ public class ClienteDAO implements IClienteDAO{
 		catch(Exception e) {
 			throw e;
 		} 
+		finally {
+			if(stm != null && !stm.isClosed()) {
+				stm.close();
+			}
+			
+			if(connection != null && !connection.isClosed()) {
+				connection.close();
+			}
+		}
+	}
+
+	@Override
+	public List<Cliente> buscarTodos() throws Exception {
+		Connection connection = null;
+		PreparedStatement stm = null;
+		ResultSet result = null;
+		
+		List<Cliente> list = new ArrayList<>();
+		Cliente cliente = null;
+		
+		try {
+			connection = ConnectionFactory.getConnection();
+			String sqlCommand = "SELECT * FROM tb_cliente";
+			
+			stm = connection.prepareStatement(sqlCommand);
+			result = stm.executeQuery();
+			
+			while(result.next()) {
+				cliente = new Cliente();
+				
+				Long id = result.getLong("id");
+				String nome = result.getString("nome");
+				String codigo = result.getString("codigo");
+				
+				cliente.setId(id);
+				cliente.setNome(nome);
+				cliente.setCodigo(codigo);
+				
+				list.add(cliente);
+			}
+			
+			return list;
+		}
+		catch(Exception e) {
+			throw e;
+		}
 		finally {
 			if(stm != null && !stm.isClosed()) {
 				stm.close();
