@@ -108,4 +108,35 @@ public class ClienteDAO implements IClienteDAO{
 			}
 		}
 	}
+
+	@Override
+	public Integer atualizar(String codigo) throws Exception {
+		Connection connection = null;
+		PreparedStatement stm = null;
+		
+		try {
+			connection = ConnectionFactory.getConnection();
+			String sqlCommand = "UPDATE tb_cliente SET nome = ?, codigo = ? WHERE codigo = ?";
+			
+			stm = connection.prepareStatement(sqlCommand);
+			
+			stm.setString(1, "Daniel Martins");
+			stm.setString(2, "09");
+			stm.setString(3, codigo);
+			
+			return stm.executeUpdate();
+		} 
+		catch(Exception e) {
+			throw e;
+		} 
+		finally {
+			if(stm != null && !stm.isClosed()) {
+				stm.close();
+			}
+			
+			if(connection != null && !connection.isClosed()) {
+				connection.close();
+			}
+		}
+	}
 }

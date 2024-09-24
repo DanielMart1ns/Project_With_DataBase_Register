@@ -34,4 +34,38 @@ public class ClienteTeste {
 		Integer contDel = dao.excluir(clienteBD);
 		assertNotNull(contDel);
 	}
+	
+	@Test
+	public void atualizarTest() throws Exception {
+		IClienteDAO dao = new ClienteDAO();
+		
+		//criando cliente
+		Cliente cliente = new Cliente();
+		cliente.setNome("Daniel");
+		cliente.setCodigo("02");
+		
+		Integer qtd = dao.cadastrar(cliente);
+		assertTrue(qtd == 1);
+		
+		//consultando
+		Cliente clienteBD = dao.consultar(cliente.getCodigo());
+		assertNotNull(clienteBD);
+		assertNotNull(clienteBD.getId());
+		assertEquals(cliente.getNome(), clienteBD.getNome());
+		assertEquals(cliente.getCodigo(), clienteBD.getCodigo());
+		
+		//atualizando
+		Integer wasUpdated = dao.atualizar(clienteBD.getCodigo());
+		assertNotNull(wasUpdated);
+		assertTrue(wasUpdated == 1);
+		
+		//consultando
+		clienteBD = dao.consultar("09"); //código atualizado
+		assertNotNull(clienteBD);
+		assertNotNull(clienteBD.getId());
+		
+		//deletando
+		Integer contDel = dao.excluir(clienteBD);
+		assertNotNull(contDel);
+	}
 }

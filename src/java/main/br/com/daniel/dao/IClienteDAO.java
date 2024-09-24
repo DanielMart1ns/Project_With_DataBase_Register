@@ -9,4 +9,6 @@ public interface IClienteDAO {
 	public Cliente consultar(String codigo) throws Exception;
 
 	public Integer excluir(Cliente clienteBD)  throws Exception;
+	
+	public Integer atualizar(String codigo) throws Exception;
 }
